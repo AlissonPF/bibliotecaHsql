@@ -18,6 +18,9 @@ public class Principal {
                 case 2:
                     new AppLivro();
                     break;
+                case 3:
+                    new AppEmprestimo();
+                    break;
                 case 4:
                     break;
                 default:

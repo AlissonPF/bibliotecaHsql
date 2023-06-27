@@ -3,8 +3,10 @@ package persistencia;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
+import entities.Cliente;
 import entities.Livro;
 
 public class LivroPersistencia {
@@ -52,20 +54,57 @@ public class LivroPersistencia {
     return livros;
   }
 
-  public static void atualizar(Livro livro, String novoTitulo) {
-    EntityManager manager = EntityManagerFactory.getInstance();
+  
+  // public static void atualizar(Livro livro) {
+  //   EntityManager manager = EntityManagerFactory.getInstance();
+  //   manager.getTransaction().begin();
 
-    Query consulta = manager.createQuery("UPDATE Livro SET titulo = :titulo, autor = :autor WHERE titulo = :titulo");
-    consulta.setParameter("titulo", novoTitulo);
-    consulta.setParameter("autor", livro.getAutor());
-    consulta.setParameter("titulo", livro.getTitulo());
 
-    int linhasAtualizadas = consulta.executeUpdate();
+  //   Query consulta = manager.createQuery("UPDATE Livro SET autor = :autor WHERE titulo = :titulo");
+  //   consulta.setParameter("autor", livro.getAutor());
+  //   consulta.setParameter("titulo", livro.getTitulo());
 
-    if (linhasAtualizadas > 0) {
-      manager.getTransaction().commit();
-    } else {
-      manager.getTransaction().rollback();
+  //   int linhasAtualizadas = consulta.executeUpdate();
+
+  //   if (linhasAtualizadas > 0) {
+  //     manager.getTransaction().commit();
+  //   } else {
+  //     manager.getTransaction().rollback();
+  //   }
+  // }
+
+  public static void atualizar(Livro livro) {
+  EntityManager manager = EntityManagerFactory.getInstance();
+  EntityTransaction transaction = manager.getTransaction();
+
+  try {
+    transaction.begin();
+    Livro livroExistente = manager.find(Livro.class, livro.getId());
+
+    if (livroExistente != null) {
+      livroExistente.setTitulo(livro.getTitulo());
+      livroExistente.setAutor(livro.getAutor());
+
+      transaction.commit();
     }
+  } catch (Exception e) {
+    if (transaction != null && transaction.isActive()) {
+      transaction.rollback();
+    }
+    e.printStackTrace();
   }
+}
+
+  public static Livro procurarPorId(Livro livro) {
+    EntityManager manager = EntityManagerFactory.getInstance();
+    Query consulta = manager.createQuery("from Livro where id = :param");
+    consulta.setParameter("param", livro.getId());
+    List<Livro> livros = consulta.getResultList();
+    if (!livros.isEmpty()) {
+      return livros.get(0);
+    }
+    return null;
+  }
+
+
 }

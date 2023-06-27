@@ -58,10 +58,10 @@ public class AppLivro {
       if (LivroPersistencia.incluir(objLivro)) {
         System.out.println("Cadastro realizado com sucesso!");
       } else {
-        System.out.println("Algo deu errado na hora de cadastrar o cliente!");
+        System.out.println("Algo deu errado na hora de cadastrar o livro!");
       }
     } else {
-      System.out.println("Cpf já cadastrado!");
+      System.out.println("Livro já cadastrado!");
     }
   }
 
@@ -126,18 +126,34 @@ public class AppLivro {
 
   // -------------------------------------------------------------------------------------------------
 
+  // public void atualizarLivro() {
+  //   System.out.println("\n\n*****Atualizar livro*****");
+  //   Livro objLivro = new Livro();
+  //   String novoTitulo;
+  //   objLivro.setTitulo(Console.readString("Informe o titulo: "));
+  //   if (LivroPersistencia.procurarPorTitulo(objLivro) != null) {
+  //     novoTitulo = Console.readString("Informe o novo titulo: ");
+  //     objLivro.setAutor(Console.readString("Informe o autor: "));
+  //     LivroPersistencia.atualizar(objLivro, novoTitulo);
+  //     System.out.println("Livro atualizado com sucesso!");
+  //   } else {
+  //     System.out.println("Livro não encontrado!");
+  //   }
+  // }
+
   public void atualizarLivro() {
     System.out.println("\n\n*****Atualizar livro*****");
     Livro objLivro = new Livro();
-    String novoTitulo;
-    objLivro.setTitulo(Console.readString("Informe o titulo: "));
-    if (LivroPersistencia.procurarPorTitulo(objLivro) != null) {
-      novoTitulo = Console.readString("Informe o novo titulo: ");
+    objLivro.setId(Console.readInt("Informe o id: "));
+    if (LivroPersistencia.procurarPorId(objLivro) != null) {
+      objLivro.setTitulo(Console.readString("Informe o titulo: "));
       objLivro.setAutor(Console.readString("Informe o autor: "));
-      LivroPersistencia.atualizar(objLivro, novoTitulo);
+      LivroPersistencia.atualizar(objLivro);
       System.out.println("Livro atualizado com sucesso!");
     } else {
       System.out.println("Livro não encontrado!");
     }
   }
+
+  
 }
