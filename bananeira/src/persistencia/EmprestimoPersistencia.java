@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import entities.Cliente;
@@ -60,4 +61,27 @@ public class EmprestimoPersistencia {
     List<Emprestimo> emprestimos = consulta.getResultList();
     return emprestimos;
   }
+
+  public static void atualizar(Emprestimo emprestimo) {
+  EntityManager manager = EntityManagerFactory.getInstance();
+  EntityTransaction transaction = manager.getTransaction();
+
+  try {
+    transaction.begin();
+    Emprestimo emprestimoExistente = manager.find(Emprestimo.class, emprestimo.getId());
+
+    if (emprestimoExistente != null) {
+        LocalDate data = emprestimoExistente.getDataDevolução();
+        LocalDate data2 = data.plusDays(14);
+
+        emprestimoExistente.setDataDevolução(data2);
+      transaction.commit();
+    }
+  } catch (Exception e) {
+    if (transaction != null && transaction.isActive()) {
+      transaction.rollback();
+    }
+    e.printStackTrace();
+  }
+}
 }

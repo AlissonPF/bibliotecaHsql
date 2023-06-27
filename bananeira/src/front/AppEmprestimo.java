@@ -32,7 +32,7 @@ public class AppEmprestimo {
           listarEmprestimos();
           break;
         case 4:
-          //atualizarEmprestimo();
+          atualizarEmprestimo();
           break;
         case 5:
           deletarEmprestimo();
@@ -138,5 +138,23 @@ public class AppEmprestimo {
       System.out.println("Sem emprestimos cadastrados!");
     }
 
+  }
+
+  public void atualizarEmprestimo(){
+    System.out.println("\n\n*****Renovação de empréstimo*****");
+        Emprestimo objEmprestimo = new Emprestimo();
+        Cliente objCliente = new Cliente();
+
+        objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
+        objCliente = ClientePersistencia.procurarPorCPF(objCliente);
+
+        objEmprestimo.setCliente(objCliente);
+        if(EmprestimoPersistencia.procurarPorCliente(objEmprestimo) != null){
+            objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
+            EmprestimoPersistencia.atualizar(objEmprestimo);
+            System.out.println("Emprestimo renovado com sucesso!");
+        }else{
+            System.out.println("Emprestimo não encontrado!");
+        }
   }
 }
