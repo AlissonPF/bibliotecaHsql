@@ -1,5 +1,7 @@
 package front;
 
+import java.util.List;
+
 import entities.Cliente;
 import entities.Emprestimo;
 import entities.Livro;
@@ -27,7 +29,7 @@ public class AppEmprestimo {
           buscarEmprestimo();
           break;
         case 3:
-          //listarEmprestimos();
+          listarEmprestimos();
           break;
         case 4:
           //atualizarEmprestimo();
@@ -117,4 +119,24 @@ public class AppEmprestimo {
             System.out.println("Emprestimo não encontrado!");
         }
     }
+
+    public void listarEmprestimos() {
+    System.out.println("*****Emprestimos*****\n");
+    List<Emprestimo> emprestimos = EmprestimoPersistencia.listar();
+
+    if (emprestimos != null) {
+      System.out.println("--------------------");
+      for (Emprestimo itemEmprestimo : emprestimos) {
+        System.out.println("Id: " + itemEmprestimo.getId());
+            System.out.println("Cliente: " + itemEmprestimo.getCliente().getNome());
+            System.out.println("Livro: " + itemEmprestimo.getLivro().getTitulo());
+            System.out.println("Emprestimo: " + itemEmprestimo.getDataEmpréstimo());
+            System.out.println("Devolução: " + itemEmprestimo.getDataDevolução());
+        System.out.println("--------------------");
+      }
+    } else {
+      System.out.println("Sem emprestimos cadastrados!");
+    }
+
+  }
 }

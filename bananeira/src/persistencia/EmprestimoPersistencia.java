@@ -53,4 +53,11 @@ public class EmprestimoPersistencia {
     }
     return null;
   }
+
+  public static List<Emprestimo> listar() {
+    EntityManager manager = EntityManagerFactory.getInstance();
+    Query consulta = manager.createQuery("from Emprestimo");
+    List<Emprestimo> emprestimos = consulta.getResultList();
+    return emprestimos;
+  }
 }
