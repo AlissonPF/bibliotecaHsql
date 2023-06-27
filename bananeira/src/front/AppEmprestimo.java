@@ -24,7 +24,7 @@ public class AppEmprestimo {
           incluirEmprestimo();
           break;
         case 2:
-          //buscarEmprestimo();
+          buscarEmprestimo();
           break;
         case 3:
           //listarEmprestimos();
@@ -90,6 +90,29 @@ public class AppEmprestimo {
             }else{
                 System.out.println("Algo deu errado na hora de deletar o emprestimo!");
             }
+        }else{
+            System.out.println("Emprestimo não encontrado!");
+        }
+    }
+
+    public void buscarEmprestimo(){
+        System.out.println("\n\n*****Devolução de empréstimo*****");
+        Emprestimo objEmprestimo = new Emprestimo();
+        Cliente objCliente = new Cliente();
+
+        objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
+        objCliente = ClientePersistencia.procurarPorCPF(objCliente);
+
+        objEmprestimo.setCliente(objCliente);
+        if(EmprestimoPersistencia.procurarPorCliente(objEmprestimo) != null){
+            objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
+            System.out.println("--------------------");
+            System.out.println("Id: " + objEmprestimo.getId());
+            System.out.println("Cliente: " + objEmprestimo.getCliente().getNome());
+            System.out.println("Livro: " + objEmprestimo.getLivro().getTitulo());
+            System.out.println("Emprestimo: " + objEmprestimo.getDataEmpréstimo());
+            System.out.println("Devolução: " + objEmprestimo.getDataDevolução());
+            System.out.println("--------------------");
         }else{
             System.out.println("Emprestimo não encontrado!");
         }
