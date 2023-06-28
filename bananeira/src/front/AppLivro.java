@@ -29,7 +29,7 @@ public class AppLivro {
           listarLivros();
           break;
         case 4:
-          // listarLivrosEmprestados();
+          listarLivrosEmprestados();
           break;
         case 5:
           atualizarLivro();
@@ -119,7 +119,7 @@ public class AppLivro {
         System.out.println("--------------------");
       }
     } else {
-      System.out.println("Sem clientes cadastrados!");
+      System.out.println("Sem livros cadastrados!");
     }
 
   }
@@ -127,18 +127,18 @@ public class AppLivro {
   // -------------------------------------------------------------------------------------------------
 
   // public void atualizarLivro() {
-  //   System.out.println("\n\n*****Atualizar livro*****");
-  //   Livro objLivro = new Livro();
-  //   String novoTitulo;
-  //   objLivro.setTitulo(Console.readString("Informe o titulo: "));
-  //   if (LivroPersistencia.procurarPorTitulo(objLivro) != null) {
-  //     novoTitulo = Console.readString("Informe o novo titulo: ");
-  //     objLivro.setAutor(Console.readString("Informe o autor: "));
-  //     LivroPersistencia.atualizar(objLivro, novoTitulo);
-  //     System.out.println("Livro atualizado com sucesso!");
-  //   } else {
-  //     System.out.println("Livro não encontrado!");
-  //   }
+  // System.out.println("\n\n*****Atualizar livro*****");
+  // Livro objLivro = new Livro();
+  // String novoTitulo;
+  // objLivro.setTitulo(Console.readString("Informe o titulo: "));
+  // if (LivroPersistencia.procurarPorTitulo(objLivro) != null) {
+  // novoTitulo = Console.readString("Informe o novo titulo: ");
+  // objLivro.setAutor(Console.readString("Informe o autor: "));
+  // LivroPersistencia.atualizar(objLivro, novoTitulo);
+  // System.out.println("Livro atualizado com sucesso!");
+  // } else {
+  // System.out.println("Livro não encontrado!");
+  // }
   // }
 
   public void atualizarLivro() {
@@ -155,5 +155,21 @@ public class AppLivro {
     }
   }
 
-  
+  public void listarLivrosEmprestados() {
+    System.out.println("*****Livros*****\n");
+    List<Livro> livros = LivroPersistencia.listarEmprestados();
+
+    if (livros != null) {
+      System.out.println("--------------------");
+      for (Livro itemLivro : livros) {
+        System.out.println("Id: " + itemLivro.getId());
+        System.out.println("Titulo: " + itemLivro.getTitulo());
+        System.out.println("Autor: " + itemLivro.getAutor());
+        System.out.println("--------------------");
+      }
+    } else {
+      System.out.println("Sem livros emprestados!");
+    }
+  }
+
 }
