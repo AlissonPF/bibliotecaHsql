@@ -3,7 +3,9 @@ package front;
 import java.util.List;
 
 import entities.Cliente;
+import entities.Livro;
 import persistencia.ClientePersistencia;
+import persistencia.LivroPersistencia;
 
 public class AppCliente {
   public AppCliente() {
@@ -13,9 +15,10 @@ public class AppCliente {
       System.out.println("1- Cadastrar");
       System.out.println("2- Buscar");
       System.out.println("3- Listar");
-      System.out.println("4- Atualizar");
-      System.out.println("5- Deletar");
-      System.out.println("6- Voltar");
+      System.out.println("4- Listar clientes com empréstimo ativo");
+      System.out.println("5- Atualizar");
+      System.out.println("6- Deletar");
+      System.out.println("7- Voltar");
       opc = Console.readInt("Informe a opção: ");
       switch (opc) {
         case 1:
@@ -28,19 +31,22 @@ public class AppCliente {
           listarClientes();
           break;
         case 4:
-          atualizarCliente();
+          listarClientesEmprestados();
           break;
         case 5:
-          deletarCliente();
+          atualizarCliente();
           break;
         case 6:
+          deletarCliente();
+          break;
+        case 7:
           break;
         default:
           System.out.println("Valor inválido!");
           break;
       }
 
-    } while (opc != 6);
+    } while (opc != 7);
   }
 
   public void incluirCliente() {
@@ -89,7 +95,7 @@ public class AppCliente {
 
     objCliente.setCpf(Console.readString("Informe o cpf: "));
     objCliente = ClientePersistencia.procurarPorCPF(objCliente);
-    if (objCliente != null) {
+    if (objCliente != null && !ClientePersistencia.verificarEmprestado(objCliente)) {
       if (ClientePersistencia.excluir(objCliente)) {
         ClientePersistencia.excluir(objCliente);
         System.out.println("Cliente removido com sucesso!");
@@ -97,7 +103,7 @@ public class AppCliente {
         System.out.println("Algo deu errado na hora de remover o cliente!");
       }
     } else {
-      System.out.println("Cliente não encontrado!");
+      System.out.println("Cliente não encontrado ou com empréstimo ativo!");
     }
   }
 
@@ -129,13 +135,33 @@ public class AppCliente {
     Cliente objCliente = new Cliente();
 
     objCliente.setCpf(Console.readString("Informe o cpf: "));
-    if (ClientePersistencia.procurarPorCPF(objCliente) != null) {
+    objCliente = ClientePersistencia.procurarPorCPF(objCliente);
+    if (ClientePersistencia.procurarPorCPF(objCliente) != null
+        && !ClientePersistencia.verificarEmprestado(objCliente)) {
       objCliente.setNome(Console.readString("Informe o nome: "));
       objCliente.setIdade(Console.readInt("Informe a idade: "));
       ClientePersistencia.atualizar(objCliente);
       System.out.println("Cliente atualizado com sucesso!");
     } else {
-      System.out.println("Cliente não encontrado!");
+      System.out.println("Cliente não encontrado ou com empréstimo ativo!");
+    }
+  }
+
+  public void listarClientesEmprestados() {
+    System.out.println("*****Clientes*****\n");
+    List<Cliente> clientes = ClientePersistencia.listarEmprestados();
+
+    if (clientes != null) {
+      System.out.println("--------------------");
+      for (Cliente itemCliente : clientes) {
+        System.out.println("Id: " + itemCliente.getId());
+        System.out.println("Cpf: " + itemCliente.getCpf());
+        System.out.println("Nome: " + itemCliente.getNome());
+        System.out.println("Idade: " + itemCliente.getIdade());
+        System.out.println("--------------------");
+      }
+    } else {
+      System.out.println("Sem Clientes emprestados!");
     }
   }
 }
