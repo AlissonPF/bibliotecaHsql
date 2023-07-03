@@ -21,20 +21,6 @@ public class LivroPersistencia {
     }
   }
 
-  // public static boolean excluir(Livro livro) {
-  // try {
-  // EntityManager manager = EntityManagerFactory.getInstance();
-  // manager.getTransaction().begin();
-  // manager.remove(livro);
-  // manager.getTransaction().commit();
-  // return true;
-
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // return false;
-  // }
-  // }
-
   public static boolean excluir(Livro livro) {
     try {
       EntityManager manager = EntityManagerFactory.getInstance();
@@ -81,29 +67,6 @@ public class LivroPersistencia {
     return livros;
   }
 
-  // public static void atualizar(Livro livro) {
-  // EntityManager manager = EntityManagerFactory.getInstance();
-  // EntityTransaction transaction = manager.getTransaction();
-
-  // try {
-  // transaction.begin();
-  // Livro livroExistente = manager.find(Livro.class, livro.getId());
-
-  // if (livroExistente != null) {
-  // livroExistente.setTitulo(livro.getTitulo());
-  // livroExistente.setAutor(livro.getAutor());
-
-  // transaction.commit();
-  // }
-  // transaction.commit();
-  // } catch (Exception e) {
-  // if (transaction != null && transaction.isActive()) {
-  // transaction.rollback();
-  // }
-  // e.printStackTrace();
-  // }
-  // }
-
   public static void atualizar(Livro livro) {
     try {
       EntityManager manager = EntityManagerFactory.getInstance();
@@ -132,16 +95,6 @@ public class LivroPersistencia {
     }
     return null;
   }
-
-  // public static boolean verificarEmprestado(Livro livro) {
-  // List<Livro> emprestados = listarEmprestados();
-  // for (Livro itemLivro : emprestados) {
-  // if (itemLivro.getId() == livro.getId()) {
-  // return true;
-  // }
-  // }
-  // return false;
-  // }
 
   public static boolean verificarEmprestado(Livro livro) {
     try {

@@ -1,5 +1,6 @@
 package front;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import entities.Cliente;
@@ -10,7 +11,7 @@ import persistencia.EmprestimoPersistencia;
 import persistencia.LivroPersistencia;
 
 public class AppEmprestimo {
-    public AppEmprestimo() {
+  public AppEmprestimo() {
     int opc;
     do {
       System.out.println("\n\n*****Empréstimo*****");
@@ -47,80 +48,79 @@ public class AppEmprestimo {
     } while (opc != 6);
   }
 
-    public void incluirEmprestimo(){
+  public void incluirEmprestimo() {
     System.out.println("\n\n*****Cadastro de empréstimo*****");
     Emprestimo objEmprestimo = new Emprestimo();
     Cliente objCliente = new Cliente();
     Livro objLivro = new Livro();
 
     objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
-    objLivro.setId(Console.readInt("Informe o id do livro: "));
+    objLivro.setTitulo(Console.readString("Informe o titulo do livro: "));
 
     objCliente = ClientePersistencia.procurarPorCPF(objCliente);
-    objLivro = LivroPersistencia.procurarPorId(objLivro);
+    objLivro = LivroPersistencia.procurarPorTitulo(objLivro);
 
-    
-    if(objCliente != null && objLivro != null){
+    if (objCliente != null && objLivro != null) {
+      objEmprestimo.setCliente(objCliente);
+      if (EmprestimoPersistencia.procurarPorCliente(objEmprestimo) == null) {
         objEmprestimo.setCliente(objCliente);
-        if(EmprestimoPersistencia.procurarPorCliente(objEmprestimo) == null){
-            objEmprestimo.setCliente(objCliente);
-            objEmprestimo.setLivro(objLivro);
-            if(EmprestimoPersistencia.incluir(objEmprestimo)){
-                System.out.println("Emprestimo cadastrado!");
-            }else{
-                System.out.println("Cliente ou livro não encontrado!");
-            }
-        }else{
-            System.out.println("Emprestimo ja existe!");
+        objEmprestimo.setLivro(objLivro);
+        if (EmprestimoPersistencia.incluir(objEmprestimo)) {
+          System.out.println("Emprestimo cadastrado!");
+        } else {
+          System.out.println("Cliente ou livro não encontrado!");
         }
+      } else {
+        System.out.println("Emprestimo ja existe!");
+      }
     }
+  }
+
+  public void deletarEmprestimo() {
+    System.out.println("\n\n*****Devolução de empréstimo*****");
+    Emprestimo objEmprestimo = new Emprestimo();
+    Cliente objCliente = new Cliente();
+
+    objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
+    objCliente = ClientePersistencia.procurarPorCPF(objCliente);
+
+    objEmprestimo.setCliente(objCliente);
+    if (EmprestimoPersistencia.procurarPorCliente(objEmprestimo) != null) {
+      objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
+      if (EmprestimoPersistencia.excluir(objEmprestimo)) {
+        System.out.println("Empréstimo deletado com sucesso!");
+      } else {
+        System.out.println("Algo deu errado na hora de deletar o emprestimo!");
+      }
+    } else {
+      System.out.println("Emprestimo não encontrado!");
     }
+  }
 
-    public void deletarEmprestimo(){
-        System.out.println("\n\n*****Devolução de empréstimo*****");
-        Emprestimo objEmprestimo = new Emprestimo();
-        Cliente objCliente = new Cliente();
+  public void buscarEmprestimo() {
+    System.out.println("\n\n*****Devolução de empréstimo*****");
+    Emprestimo objEmprestimo = new Emprestimo();
+    Cliente objCliente = new Cliente();
 
-        objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
-        objCliente = ClientePersistencia.procurarPorCPF(objCliente);
+    objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
+    objCliente = ClientePersistencia.procurarPorCPF(objCliente);
 
-        objEmprestimo.setCliente(objCliente);
-        if(EmprestimoPersistencia.procurarPorCliente(objEmprestimo) != null){
-            objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
-            if(EmprestimoPersistencia.excluir(objEmprestimo)){
-                System.out.println("Empréstimo deletado com sucesso!");
-            }else{
-                System.out.println("Algo deu errado na hora de deletar o emprestimo!");
-            }
-        }else{
-            System.out.println("Emprestimo não encontrado!");
-        }
+    objEmprestimo.setCliente(objCliente);
+    if (EmprestimoPersistencia.procurarPorCliente(objEmprestimo) != null) {
+      objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
+      System.out.println("--------------------");
+      System.out.println("Id: " + objEmprestimo.getId());
+      System.out.println("Cliente: " + objEmprestimo.getCliente().getNome());
+      System.out.println("Livro: " + objEmprestimo.getLivro().getTitulo());
+      System.out.println("Emprestimo: " + objEmprestimo.getDataEmpréstimo());
+      System.out.println("Devolução: " + objEmprestimo.getDataDevolução());
+      System.out.println("--------------------");
+    } else {
+      System.out.println("Emprestimo não encontrado!");
     }
+  }
 
-    public void buscarEmprestimo(){
-        System.out.println("\n\n*****Devolução de empréstimo*****");
-        Emprestimo objEmprestimo = new Emprestimo();
-        Cliente objCliente = new Cliente();
-
-        objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
-        objCliente = ClientePersistencia.procurarPorCPF(objCliente);
-
-        objEmprestimo.setCliente(objCliente);
-        if(EmprestimoPersistencia.procurarPorCliente(objEmprestimo) != null){
-            objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
-            System.out.println("--------------------");
-            System.out.println("Id: " + objEmprestimo.getId());
-            System.out.println("Cliente: " + objEmprestimo.getCliente().getNome());
-            System.out.println("Livro: " + objEmprestimo.getLivro().getTitulo());
-            System.out.println("Emprestimo: " + objEmprestimo.getDataEmpréstimo());
-            System.out.println("Devolução: " + objEmprestimo.getDataDevolução());
-            System.out.println("--------------------");
-        }else{
-            System.out.println("Emprestimo não encontrado!");
-        }
-    }
-
-    public void listarEmprestimos() {
+  public void listarEmprestimos() {
     System.out.println("*****Emprestimos*****\n");
     List<Emprestimo> emprestimos = EmprestimoPersistencia.listar();
 
@@ -128,10 +128,10 @@ public class AppEmprestimo {
       System.out.println("--------------------");
       for (Emprestimo itemEmprestimo : emprestimos) {
         System.out.println("Id: " + itemEmprestimo.getId());
-            System.out.println("Cliente: " + itemEmprestimo.getCliente().getNome());
-            System.out.println("Livro: " + itemEmprestimo.getLivro().getTitulo());
-            System.out.println("Emprestimo: " + itemEmprestimo.getDataEmpréstimo());
-            System.out.println("Devolução: " + itemEmprestimo.getDataDevolução());
+        System.out.println("Cliente: " + itemEmprestimo.getCliente().getNome());
+        System.out.println("Livro: " + itemEmprestimo.getLivro().getTitulo());
+        System.out.println("Emprestimo: " + itemEmprestimo.getDataEmpréstimo());
+        System.out.println("Devolução: " + itemEmprestimo.getDataDevolução());
         System.out.println("--------------------");
       }
     } else {
@@ -140,21 +140,27 @@ public class AppEmprestimo {
 
   }
 
-  public void atualizarEmprestimo(){
+  public void atualizarEmprestimo() {
     System.out.println("\n\n*****Renovação de empréstimo*****");
-        Emprestimo objEmprestimo = new Emprestimo();
-        Cliente objCliente = new Cliente();
+    Emprestimo objEmprestimo = new Emprestimo();
+    Cliente objCliente = new Cliente();
 
-        objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
-        objCliente = ClientePersistencia.procurarPorCPF(objCliente);
+    objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
+    objCliente = ClientePersistencia.procurarPorCPF(objCliente);
 
-        objEmprestimo.setCliente(objCliente);
-        if(EmprestimoPersistencia.procurarPorCliente(objEmprestimo) != null){
-            objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
-            EmprestimoPersistencia.atualizar(objEmprestimo);
-            System.out.println("Emprestimo renovado com sucesso!");
-        }else{
-            System.out.println("Emprestimo não encontrado!");
-        }
+    objEmprestimo.setCliente(objCliente);
+    objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
+    int data1 = objEmprestimo.getDataEmpréstimo().getDayOfYear();
+    data1 += 28;
+    if (objEmprestimo != null) {
+      if (objEmprestimo.getDataDevolução().getDayOfYear() < data1) {
+        EmprestimoPersistencia.atualizar(objEmprestimo);
+        System.out.println("Emprestimo renovado com sucesso!");
+      } else {
+        System.out.println("Empréstimo ja renovado 1 vez!");
+      }
+    } else {
+      System.out.println("Emprestimo não encontrado!");
+    }
   }
 }

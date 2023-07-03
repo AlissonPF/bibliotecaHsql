@@ -7,7 +7,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import entities.Cliente;
-import entities.Livro;
 
 public class ClientePersistencia {
   public static boolean incluir(Cliente cliente) {
@@ -21,20 +20,6 @@ public class ClientePersistencia {
       return false;
     }
   }
-
-  // public static boolean excluir(Cliente cliente) {
-  // try {
-  // EntityManager manager = EntityManagerFactory.getInstance();
-  // manager.getTransaction().begin();
-  // manager.remove(cliente);
-  // manager.getTransaction().commit();
-  // return true;
-
-  // } catch (Exception e) {
-  // e.printStackTrace();
-  // return false;
-  // }
-  // }
 
   public static boolean excluir(Cliente cliente) {
     try {

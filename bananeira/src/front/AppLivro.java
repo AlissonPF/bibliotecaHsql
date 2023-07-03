@@ -131,7 +131,7 @@ public class AppLivro {
     Livro objLivro = new Livro();
     objLivro.setTitulo(Console.readString("Informe o titulo: "));
     objLivro = LivroPersistencia.procurarPorTitulo(objLivro);
-    if (LivroPersistencia.procurarPorTitulo(objLivro) != null && !LivroPersistencia.verificarEmprestado(objLivro)) {
+    if (objLivro != null && !LivroPersistencia.verificarEmprestado(objLivro)) {
       objLivro.setTitulo(Console.readString("Informe o titulo: "));
       objLivro.setAutor(Console.readString("Informe o autor: "));
       LivroPersistencia.atualizar(objLivro);

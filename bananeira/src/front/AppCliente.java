@@ -3,9 +3,8 @@ package front;
 import java.util.List;
 
 import entities.Cliente;
-import entities.Livro;
+import negocio.ValidaCPF;
 import persistencia.ClientePersistencia;
-import persistencia.LivroPersistencia;
 
 public class AppCliente {
   public AppCliente() {
@@ -54,16 +53,20 @@ public class AppCliente {
     Cliente objCliente = new Cliente();
 
     objCliente.setCpf(Console.readString("Informe o cpf: "));
-    if (ClientePersistencia.procurarPorCPF(objCliente) == null) {
-      objCliente.setNome(Console.readString("Informe o nome: "));
-      objCliente.setIdade(Console.readInt("Informe a idade:"));
-      if (ClientePersistencia.incluir(objCliente)) {
-        System.out.println("Cadastro realizado com sucesso!");
+    if (ValidaCPF.isCPF(objCliente.getCpf())) {
+      if (ClientePersistencia.procurarPorCPF(objCliente) == null) {
+        objCliente.setNome(Console.readString("Informe o nome: "));
+        objCliente.setIdade(Console.readInt("Informe a idade:"));
+        if (ClientePersistencia.incluir(objCliente)) {
+          System.out.println("Cadastro realizado com sucesso!");
+        } else {
+          System.out.println("Algo deu errado na hora de cadastrar o cliente!");
+        }
       } else {
-        System.out.println("Algo deu errado na hora de cadastrar o cliente!");
+        System.out.println("Cpf já cadastrado!");
       }
     } else {
-      System.out.println("Cpf já cadastrado!");
+      System.out.println("CPF inválido!");
     }
   }
 
@@ -136,7 +139,8 @@ public class AppCliente {
 
     objCliente.setCpf(Console.readString("Informe o cpf: "));
     objCliente = ClientePersistencia.procurarPorCPF(objCliente);
-    if (ClientePersistencia.procurarPorCPF(objCliente) != null
+
+    if (objCliente != null
         && !ClientePersistencia.verificarEmprestado(objCliente)) {
       objCliente.setNome(Console.readString("Informe o nome: "));
       objCliente.setIdade(Console.readInt("Informe a idade: "));

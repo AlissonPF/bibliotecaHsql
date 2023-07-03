@@ -1,6 +1,5 @@
 package persistencia;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -8,18 +7,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
-import entities.Cliente;
 import entities.Emprestimo;
-import entities.Livro;
 
 public class EmprestimoPersistencia {
-    public static boolean incluir(Emprestimo emprestimo) {
+  public static boolean incluir(Emprestimo emprestimo) {
     try {
-        LocalDate data1 = LocalDate.now();
-        LocalDate data2 = data1.plusDays(14);
+      LocalDate data1 = LocalDate.now();
+      LocalDate data2 = data1.plusDays(14);
 
-        emprestimo.setDataEmpréstimo(data1);
-        emprestimo.setDataDevolução(data2);
+      emprestimo.setDataEmpréstimo(data1);
+      emprestimo.setDataDevolução(data2);
       EntityManager manager = EntityManagerFactory.getInstance();
       manager.getTransaction().begin();
       manager.persist(emprestimo);
@@ -63,25 +60,25 @@ public class EmprestimoPersistencia {
   }
 
   public static void atualizar(Emprestimo emprestimo) {
-  EntityManager manager = EntityManagerFactory.getInstance();
-  EntityTransaction transaction = manager.getTransaction();
+    EntityManager manager = EntityManagerFactory.getInstance();
+    EntityTransaction transaction = manager.getTransaction();
 
-  try {
-    transaction.begin();
-    Emprestimo emprestimoExistente = manager.find(Emprestimo.class, emprestimo.getId());
+    try {
+      transaction.begin();
+      Emprestimo emprestimoExistente = manager.find(Emprestimo.class, emprestimo.getId());
 
-    if (emprestimoExistente != null) {
+      if (emprestimoExistente != null) {
         LocalDate data = emprestimoExistente.getDataDevolução();
         LocalDate data2 = data.plusDays(14);
 
         emprestimoExistente.setDataDevolução(data2);
-      transaction.commit();
+        transaction.commit();
+      }
+    } catch (Exception e) {
+      if (transaction != null && transaction.isActive()) {
+        transaction.rollback();
+      }
+      e.printStackTrace();
     }
-  } catch (Exception e) {
-    if (transaction != null && transaction.isActive()) {
-      transaction.rollback();
-    }
-    e.printStackTrace();
   }
-}
 }
