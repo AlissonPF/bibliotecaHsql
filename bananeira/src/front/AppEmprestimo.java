@@ -83,9 +83,13 @@ public class AppEmprestimo {
 
     objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
     objCliente = ClientePersistencia.procurarPorCPF(objCliente);
-
-    objEmprestimo.setCliente(objCliente);
-    if (EmprestimoPersistencia.procurarPorCliente(objEmprestimo) != null) {
+    if (objCliente != null) {
+      objEmprestimo.setCliente(objCliente);
+      objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
+    } else {
+      objEmprestimo = null;
+    }
+    if (objEmprestimo != null) {
       objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
       if (EmprestimoPersistencia.excluir(objEmprestimo)) {
         System.out.println("Empréstimo deletado com sucesso!");
@@ -98,15 +102,19 @@ public class AppEmprestimo {
   }
 
   public void buscarEmprestimo() {
-    System.out.println("\n\n*****Devolução de empréstimo*****");
+    System.out.println("\n\n*****Buscar empréstimo*****");
     Emprestimo objEmprestimo = new Emprestimo();
     Cliente objCliente = new Cliente();
 
     objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
     objCliente = ClientePersistencia.procurarPorCPF(objCliente);
-
-    objEmprestimo.setCliente(objCliente);
-    if (EmprestimoPersistencia.procurarPorCliente(objEmprestimo) != null) {
+    if (objCliente != null) {
+      objEmprestimo.setCliente(objCliente);
+      objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
+    } else {
+      objEmprestimo = null;
+    }
+    if (objEmprestimo != null) {
       objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
       System.out.println("--------------------");
       System.out.println("Id: " + objEmprestimo.getId());
@@ -144,14 +152,19 @@ public class AppEmprestimo {
     System.out.println("\n\n*****Renovação de empréstimo*****");
     Emprestimo objEmprestimo = new Emprestimo();
     Cliente objCliente = new Cliente();
-
+    int data1;
     objCliente.setCpf(Console.readString("Informe o cpf do cliente: "));
     objCliente = ClientePersistencia.procurarPorCPF(objCliente);
 
-    objEmprestimo.setCliente(objCliente);
-    objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
-    int data1 = objEmprestimo.getDataEmpréstimo().getDayOfYear();
-    data1 += 28;
+    if (objCliente != null) {
+      objEmprestimo.setCliente(objCliente);
+      objEmprestimo = EmprestimoPersistencia.procurarPorCliente(objEmprestimo);
+      data1 = objEmprestimo.getDataEmpréstimo().getDayOfYear();
+      data1 += 28;
+    } else {
+      objEmprestimo = null;
+      data1 = 0;
+    }
     if (objEmprestimo != null) {
       if (objEmprestimo.getDataDevolução().getDayOfYear() < data1) {
         EmprestimoPersistencia.atualizar(objEmprestimo);

@@ -56,7 +56,7 @@ public class AppCliente {
     if (ValidaCPF.isCPF(objCliente.getCpf())) {
       if (ClientePersistencia.procurarPorCPF(objCliente) == null) {
         objCliente.setNome(Console.readString("Informe o nome: "));
-        objCliente.setIdade(Console.readInt("Informe a idade:"));
+        objCliente.setIdade(Console.readInt("Informe a idade: "));
         if (ClientePersistencia.incluir(objCliente)) {
           System.out.println("Cadastro realizado com sucesso!");
         } else {
